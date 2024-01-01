@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:whiteboard/whiteboard.dart';
 import 'package:writey/screens/controller_bar_widget.dart';
 
