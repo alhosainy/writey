@@ -1,10 +1,9 @@
-import 'dart:js' as js;
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:whiteboard/whiteboard.dart';
 
 import 'package:writey/screens/controller_bar_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({
@@ -21,6 +20,14 @@ class _MyHomePageState extends State<MyHomePage> {
   bool isControllerBarVisible = true;
   double strokeWidth = 4;
   bool isPickingStroke = false;
+  final Uri _url = Uri.parse('https://github.com/alhosainy');
+
+  Future<void> _launchUrl() async {
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,22 +41,17 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         actions: [
           GestureDetector(
-            onTap: () =>
-                js.context.callMethod('open', ['https://github.com/alhosainy']),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+            onTap: () async => await _launchUrl(),
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  IconButton(
-                    tooltip: 'Github Page',
-                    onPressed: () => js.context
-                        .callMethod('open', ['https://github.com/alhosainy']),
-                    icon: const Icon(FontAwesomeIcons.github),
-                  ),
-                  const Text(
+                  Icon(FontAwesomeIcons.github),
+                  Text(
                     'Alhosainy Yaser',
                     style: TextStyle(
-                        fontSize: 10,
+                        fontSize: 12,
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'NotoSans'),
