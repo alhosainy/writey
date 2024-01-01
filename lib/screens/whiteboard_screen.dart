@@ -1,5 +1,9 @@
+import 'dart:js' as js;
+
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:whiteboard/whiteboard.dart';
+
 import 'package:writey/screens/controller_bar_widget.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -28,6 +32,13 @@ class _MyHomePageState extends State<MyHomePage> {
               fontWeight: FontWeight.bold,
               fontFamily: 'NotoSans'),
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                js.context.callMethod('open', ['https://github.com/alhosainy']);
+              },
+              icon: const Icon(FontAwesomeIcons.github))
+        ],
         backgroundColor: Colors.teal[200],
       ),
       body: Stack(
