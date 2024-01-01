@@ -1,64 +1,16 @@
-name: On Website Deploy
-"on":
+name: Gh-Pages
+
+on:
   push:
-    # (1)
-    branches:
-      - "master"
+    branches: [ master ]
 
-      
-permissions:
-  contents: write
-  pages: write
-  id-token: write
-  
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
-
-  
 jobs:
-  build_and_deploy_web:
-    name: Build & Deploy Flutter to Web
+  build:
     runs-on: ubuntu-latest
-    # (2)
+
     steps:
-      - uses: actions/checkout@v3
-
-      - uses: subosito/flutter-action@v2
+      - uses: actions/checkout@v2 # Only works with v2
+      - uses: subosito/flutter-action@v1
+      - uses: bluefireteam/flutter-gh-pages@v7
         with:
-          channel: "stable"
-
-      - name: 🌍 Enable Web
-        run: flutter config --enable-web
-
-      - name: 📦 Get packages
-        run: flutter pub get
-
-      - name: 🏭 Build Web Application
-        run: flutter build web --base-href "/writey/" --release
-
-      # (3)
-      - name: Make copy of artifacts
-        run: |
-          chmod u+x "${GITHUB_WORKSPACE}/createandcopytofolder.sh"
-          bash "${GITHUB_WORKSPACE}/createandcopytofolder.sh"
-      # (4)
-      - uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Commit the artifacts.
-    
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          # Upload entire repository
-          path: 'artifacts/web'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          baseHref: /writey/
