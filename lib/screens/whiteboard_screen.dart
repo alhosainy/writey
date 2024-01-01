@@ -33,11 +33,31 @@ class _MyHomePageState extends State<MyHomePage> {
               fontFamily: 'NotoSans'),
         ),
         actions: [
-          IconButton(
-              onPressed: () {
-                js.context.callMethod('open', ['https://github.com/alhosainy']);
-              },
-              icon: const Icon(FontAwesomeIcons.github))
+          GestureDetector(
+            onTap: () =>
+                js.context.callMethod('open', ['https://github.com/alhosainy']),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                children: [
+                  IconButton(
+                    tooltip: 'Github Page',
+                    onPressed: () => js.context
+                        .callMethod('open', ['https://github.com/alhosainy']),
+                    icon: const Icon(FontAwesomeIcons.github),
+                  ),
+                  const Text(
+                    'Alhosainy Yaser',
+                    style: TextStyle(
+                        fontSize: 10,
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'NotoSans'),
+                  ),
+                ],
+              ),
+            ),
+          )
         ],
         backgroundColor: Colors.teal[200],
       ),
@@ -90,32 +110,29 @@ class _MyHomePageState extends State<MyHomePage> {
                       ControllerBar(
                         whiteBoardController: _whiteBoardController,
                         isErasing: isErasing,
-                        setIsErasing: (value) {
-                          setState(() => isErasing = !isErasing);
-                        },
+                        setIsErasing: (value) =>
+                            setState(() => isErasing = !isErasing),
                         strokeColor: strokeColor,
                         setStrokeColor: (value) {
                           setState(() => strokeColor = value);
                           Navigator.of(context).pop();
                         },
                         isPickingStroke: isPickingStroke,
-                        setIsPickingStroke: (value) {
-                          setState(() => isPickingStroke = !isPickingStroke);
-                        },
+                        setIsPickingStroke: (value) =>
+                            setState(() => isPickingStroke = !isPickingStroke),
                         isControllerBarVisible: isControllerBarVisible,
-                        setIsControllerBarVisible: (value) {
-                          setState(() =>
-                              isControllerBarVisible = !isControllerBarVisible);
-                        },
+                        setIsControllerBarVisible: (value) => setState(() =>
+                            isControllerBarVisible = !isControllerBarVisible),
+                        strokeWidth: strokeWidth,
                       ),
                     ],
                   )
                 : Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: IconButton.filled(
-                      onPressed: () {
-                        setState(() => isControllerBarVisible = true);
-                      },
+                      tooltip: 'Show',
+                      onPressed: () =>
+                          setState(() => isControllerBarVisible = true),
                       icon: const Icon(Icons.arrow_back_ios_rounded),
                     ),
                   ),

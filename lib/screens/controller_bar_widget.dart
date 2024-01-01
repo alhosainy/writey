@@ -14,7 +14,8 @@ class ControllerBar extends StatefulWidget {
       required this.isPickingStroke,
       required this.setIsPickingStroke,
       required this.isControllerBarVisible,
-      required this.setIsControllerBarVisible});
+      required this.setIsControllerBarVisible,
+      required this.strokeWidth});
   final WhiteBoardController whiteBoardController;
   final bool isErasing;
   final Function(bool) setIsErasing;
@@ -24,6 +25,7 @@ class ControllerBar extends StatefulWidget {
   final Function(bool) setIsPickingStroke;
   final bool isControllerBarVisible;
   final Function(bool) setIsControllerBarVisible;
+  final double strokeWidth;
 
   @override
   State<ControllerBar> createState() => _ControllerBarState();
@@ -47,7 +49,7 @@ class _ControllerBarState extends State<ControllerBar> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             IconButton.outlined(
-              //ToDo : add lapels to the buttons
+              tooltip: 'Undo',
               onPressed: () {
                 setState(() {
                   widget.whiteBoardController.undo();
@@ -56,6 +58,7 @@ class _ControllerBarState extends State<ControllerBar> {
               icon: const Icon(FontAwesomeIcons.arrowRotateLeft),
             ),
             IconButton.outlined(
+              tooltip: 'Redo',
               onPressed: () {
                 setState(() {
                   widget.whiteBoardController.redo();
@@ -64,17 +67,13 @@ class _ControllerBarState extends State<ControllerBar> {
               icon: const Icon(FontAwesomeIcons.arrowRotateRight),
             ),
             IconButton.outlined(
+              tooltip: 'Eraser',
               isSelected: widget.isErasing,
               onPressed: () => widget.setIsErasing(!widget.isErasing),
-              // {
-              //   setState(() {
-              //     isErasing = !isErasing;
-
-              //   });
-              // },
               icon: const Icon(FontAwesomeIcons.eraser),
             ),
             IconButton.outlined(
+              tooltip: 'Clear all',
               onPressed: () {
                 setState(() {
                   widget.whiteBoardController.clear();
@@ -83,6 +82,7 @@ class _ControllerBarState extends State<ControllerBar> {
               icon: const Icon(Icons.clear),
             ),
             IconButton.outlined(
+                tooltip: 'Color',
                 onPressed: () {
                   showDialog(
                     builder: (context) => AlertDialog(
@@ -90,46 +90,95 @@ class _ControllerBarState extends State<ControllerBar> {
                       content: SingleChildScrollView(
                         child: BlockPicker(
                             pickerColor: widget.strokeColor,
-                            onColorChanged: widget.setStrokeColor
-                            //  => setState(() {
-                            //   widget.strokeColor = color;
-                            //   Navigator.of(context).pop();
-                            // }),
-                            ),
+                            onColorChanged: widget.setStrokeColor),
                       ),
                     ),
                     context: context,
                   );
                 },
                 icon: Container(
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.black,
+                    color: widget.strokeColor,
                   ),
                   height: 25,
                   width: 25,
                 )),
             IconButton.outlined(
+              tooltip: 'Width',
               isSelected: widget.isPickingStroke,
               onPressed: () =>
                   widget.setIsPickingStroke(!widget.isPickingStroke),
-              // {
-              //   setState(() {
-              //     isPickingStroke = !isPickingStroke;
-              //   });
-              // },
-              icon: const Icon(FontAwesomeIcons.pencil),
+              icon: buildStrokeIconShape(widget.strokeWidth),
             ),
             IconButton.outlined(
               onPressed: () => widget.setIsControllerBarVisible(false),
-              // {
-              //   setState(() => widget.isControllerBarVisible = false);
-              // },
+              tooltip: 'Hide',
               icon: const Icon(Icons.arrow_forward_ios_rounded),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Container buildStrokeIconShape(double strokeWidth) {
+    switch (strokeWidth) {
+      case 0:
+        return Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: widget.strokeColor,
+          ),
+          height: 2,
+          width: 2,
+        );
+
+      case 8:
+        return Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: widget.strokeColor,
+          ),
+          height: 8,
+          width: 8,
+        );
+      case 12:
+        return Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: widget.strokeColor,
+          ),
+          height: 12,
+          width: 12,
+        );
+      case 16:
+        return Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: widget.strokeColor,
+          ),
+          height: 16,
+          width: 16,
+        );
+      case 20:
+        return Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: widget.strokeColor,
+          ),
+          height: 20,
+          width: 20,
+        );
+      default:
+        return Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: widget.strokeColor,
+          ),
+          height: 4,
+          width: 4,
+        );
+    }
   }
 }
