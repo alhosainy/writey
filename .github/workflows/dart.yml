@@ -7,7 +7,7 @@ name: On Website Deploy
 
       
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
   
