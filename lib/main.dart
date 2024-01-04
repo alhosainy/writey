@@ -12,7 +12,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
         useMaterial3: true,
@@ -21,3 +20,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+//TODO : Add a feature to save the whiteboard as an image

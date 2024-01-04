@@ -66,12 +66,12 @@ class _ControllerBarState extends State<ControllerBar> {
               },
               icon: const Icon(FontAwesomeIcons.arrowRotateRight),
             ),
-            IconButton.outlined(
-              tooltip: 'Eraser',
-              isSelected: widget.isErasing,
-              onPressed: () => widget.setIsErasing(!widget.isErasing),
-              icon: const Icon(FontAwesomeIcons.eraser),
-            ),
+            // IconButton.outlined(
+            //   tooltip: 'Eraser',
+            //   isSelected: widget.isErasing,
+            //   onPressed: () => widget.setIsErasing(!widget.isErasing),
+            //   icon: const Icon(FontAwesomeIcons.eraser),
+            // ),
             IconButton.outlined(
               tooltip: 'Clear all',
               onPressed: () {
