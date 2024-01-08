@@ -1,11 +1,11 @@
 {
-    "name": "writey",
-    "short_name": "writey",
+    "name": "Writey",
+    "short_name": "Writey",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "A whiteboard app.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

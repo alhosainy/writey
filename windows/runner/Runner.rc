@@ -89,13 +89,15 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "blackbear.com" "\0"
-            VALUE "FileDescription", "writey" "\0"
+            VALUE "CompanyName", "Black Bear" "\0"
+            VALUE "FileDescription", "Writey" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "writey" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2024 blackbear.com. All rights reserved." "\0"
-            VALUE "OriginalFilename", "writey.exe" "\0"
-            VALUE "ProductName", "writey" "\0"
+            VALUE "InternalName", "Writey" "\0"
+            VALUE "LegalCopyright", "© 2021 Black Bear
+All rights reserved.
+" "\0"
+            VALUE "OriginalFilename", "Writey.exe" "\0"
+            VALUE "ProductName", "Writey" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
