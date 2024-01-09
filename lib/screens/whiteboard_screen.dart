@@ -1,19 +1,12 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:whiteboard/whiteboard.dart';
 
-import 'package:writey/screens/controller_bar_widget.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'dart:html';
-import 'package:platform/platform.dart';
+import 'controller_bar_widget.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({
-    super.key,
-  });
+  const MyHomePage({super.key});
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
