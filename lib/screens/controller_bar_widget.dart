@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:whiteboard/whiteboard.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class ControllerBar extends StatefulWidget {
   const ControllerBar(
@@ -66,12 +67,13 @@ class _ControllerBarState extends State<ControllerBar> {
               },
               icon: const Icon(FontAwesomeIcons.arrowRotateRight),
             ),
-            IconButton.outlined(
-              tooltip: 'Eraser',
-              isSelected: widget.isErasing,
-              onPressed: () => widget.setIsErasing(!widget.isErasing),
-              icon: const Icon(FontAwesomeIcons.eraser),
-            ),
+            if (!kIsWeb)
+              IconButton.outlined(
+                tooltip: 'Eraser',
+                isSelected: widget.isErasing,
+                onPressed: () => widget.setIsErasing(!widget.isErasing),
+                icon: const Icon(FontAwesomeIcons.eraser),
+              ),
             IconButton.outlined(
               tooltip: 'Clear all',
               onPressed: () {
