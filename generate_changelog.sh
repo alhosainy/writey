@@ -2,7 +2,7 @@
 version_number=$1
 
 # Create the changelog.md file
-echo "# Changelog" >changelog.md
+echo "# Changelog" >CHANGELOG.md
 echo "" >>changelog.md
 echo "All notable changes to this project will be documented in this file." >>changelog.md
 echo "" >>changelog.md
