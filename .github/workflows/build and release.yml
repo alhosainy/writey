@@ -10,26 +10,26 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-java@v4
-        with:
-          distribution: "oracle"
-          java-version: "17.0.8"
-      - uses: subosito/flutter-action@v2
-      - run: flutter pub get
+      # - uses: actions/setup-java@v4
+      #   with:
+      #     distribution: "oracle"
+      #     java-version: "17.0.8"
+      # - uses: subosito/flutter-action@v2
+      # - run: flutter pub get
 
-      - name: Build Android
-        run: flutter build apk --release --split-per-abi
+      # - name: Build Android
+      #   run: flutter build apk --release --split-per-abi
 
-      - name: Build Windows
-        run: flutter build windows --release
+      # - name: Build Windows
+      #   run: flutter build windows --release
 
-      - name: install rar
-        run: sudo apt-get install rar
+      # - name: install rar
+      #   run: sudo apt-get install rar
 
-      - name: make rar
-        run: |
-          cd build\windows\x64\runner\Release\build\windows\x64\runner\Release\
-          rar a -r writey.rar .
+      # - name: make rar
+      #   run: |
+      #     cd build\windows\x64\runner\Release\build\windows\x64\runner\Release\
+      #     jar -cfM writey.rar .
 
       - name: Set up Bash
         uses: actions/setup-node@v4
