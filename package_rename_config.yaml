@@ -2,7 +2,6 @@ package_rename_config:
   android:
     app_name: Writey
     package_name: com.blackbear.writey
-   
 
   web:
     app_name: Writey
@@ -15,3 +14,4 @@ package_rename_config:
       © 2021 Black Bear
       All rights reserved.
     exe_name: Writey
+# run dart run package_rename

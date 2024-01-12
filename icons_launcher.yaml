@@ -7,3 +7,4 @@ icons_launcher:
       enable: true
     windows:
       enable: true
+# run dart run icons_launcher:create
