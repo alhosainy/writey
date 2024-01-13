@@ -28,7 +28,7 @@ jobs:
 
       - name: make .zip file
         run: |
-          cd build\windows\x64\runner\Release\build\windows\x64\runner\Release\
+          cd build\windows\x64\runner\Release
           jar -cfM writey.zip .
 
       # - name: Set up Bash
@@ -61,7 +61,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2
       - uses: bluefireteam/flutter-gh-pages@v7
         with:
           baseHref: /writey/

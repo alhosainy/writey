@@ -67,7 +67,7 @@ class _ControllerBarState extends State<ControllerBar> {
               },
               icon: const Icon(FontAwesomeIcons.arrowRotateRight),
             ),
-            if (!kIsWeb)
+            // if (!kIsWeb)
               IconButton.outlined(
                 tooltip: 'Eraser',
                 isSelected: widget.isErasing,
