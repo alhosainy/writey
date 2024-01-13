@@ -35,17 +35,17 @@ class ControllerBar extends StatefulWidget {
 class _ControllerBarState extends State<ControllerBar> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       height: MediaQuery.of(context).size.height / 2,
       width: 50,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.teal[200],
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(20),
-            bottomLeft: Radius.circular(20),
-          ),
+      decoration: BoxDecoration(
+        color: Colors.teal[200],
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(20),
+          bottomLeft: Radius.circular(20),
         ),
+      ),
+      child: FittedBox(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -68,12 +68,12 @@ class _ControllerBarState extends State<ControllerBar> {
               icon: const Icon(FontAwesomeIcons.arrowRotateRight),
             ),
             // if (!kIsWeb)
-              IconButton.outlined(
-                tooltip: 'Eraser',
-                isSelected: widget.isErasing,
-                onPressed: () => widget.setIsErasing(!widget.isErasing),
-                icon: const Icon(FontAwesomeIcons.eraser),
-              ),
+            IconButton.outlined(
+              tooltip: 'Eraser',
+              isSelected: widget.isErasing,
+              onPressed: () => widget.setIsErasing(!widget.isErasing),
+              icon: const Icon(FontAwesomeIcons.eraser),
+            ),
             IconButton.outlined(
               tooltip: 'Clear all',
               onPressed: () {
