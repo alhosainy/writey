@@ -23,13 +23,13 @@ jobs:
       - name: Build Windows
         run: flutter build windows --release
 
-      - name: install rar
-        run: sudo apt-get install rar
+      # - name: install rar
+      #   run: sudo apt-get install rar
 
-      - name: make rar
+      - name: make .zip file
         run: |
           cd build\windows\x64\runner\Release\build\windows\x64\runner\Release\
-          jar -cfM writey.rar .
+          jar -cfM writey.zip .
 
       # - name: Set up Bash
       #   uses: actions/setup-node@v4
@@ -45,23 +45,24 @@ jobs:
       - name: Push to Release Branch
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/apk/release/*.apk,build/windows/runner/Release/*.rar"
+          artifacts: "build/app/outputs/apk/release/*.apk,build/windows/runner/Release/*.zip"
           token: ${{ secrets.GH_TOKEN }}
           tag: v1.0.${{ github.run_number }}
           body: |
-            - [Download for Android](https://github.com/alhosainy/writey/releases/download/v${version_number}/app-arm64-v8a-release.apk)
-            - [Download for Windows](https://github.com/alhosainy/writey/releases/download/v${version_number}/writey.rar)
+            - [Download for Android](https://github.com/alhosainy/writey/releases/download/v1.0.${{github.run_number}}/app-arm64-v8a-release.apk)
+            - [Download for Windows](https://github.com/alhosainy/writey/releases/download/v1.0.${{github.run_number}}/writey.rar)
             - [Web Version](https://alhosainy.github.io/writey/)
           prerelease: true
 
-  # Release-to-github-pages:
-  #   name: Release to Github Pages
-  #   runs-on: ubuntu-latest
+  Release-to-github-pages:
+    needs: build-and-release
+    name: Release to Github Pages
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: subosito/flutter-action@v2
-  #     - uses: bluefireteam/flutter-gh-pages@v7
-  #       with:
-  #         baseHref: /writey/
-  #         webRenderer: canvaskit
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+      - uses: bluefireteam/flutter-gh-pages@v7
+        with:
+          baseHref: /writey/
+          webRenderer: canvaskit
