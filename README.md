@@ -1,16 +1,17 @@
-# writey
+# Writey
 
-A new Flutter project.
+## A whiteboard app that runs on the [ Web - android - windows ]
 
-## Getting Started
+### Download
 
-This project is a starting point for a Flutter application.
+- [Download for Android](https://github.com/alhosainy/writey/releases/download/v${version_number}/app-arm64-v8a-release.apk)
+- [Download for Windows](https://github.com/alhosainy/writey/releases/download/v${version_number}/writey.rar)
+- [Web Version](https://alhosainy.github.io/writey/)
 
-A few resources to get you started if this is your first Flutter project:
+## Contributing
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Contributions are welcome! Please follow the guidelines outlined in the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## License
+
+This project is licensed under the [MIT License](LICENSE).
