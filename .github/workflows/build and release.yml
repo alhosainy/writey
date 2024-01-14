@@ -6,6 +6,9 @@ on:
       - closed
     branches: [master]
 
+env:
+  PROPERTIES_PATH: "./android/key.properties"
+
 jobs:
   build-and-release:
     name: Build and Release
@@ -17,6 +20,19 @@ jobs:
           distribution: "oracle"
           java-version: "17.0.8"
       - uses: subosito/flutter-action@v2
+      # Creating the key.properties file
+      - run: |
+          echo keyPassword=${{ secrets.KEY_STORE }} > ${{env.PROPERTIES_PATH}}
+          echo storePassword=${{ secrets.KEY_PASSWORD }} >> ${{env.PROPERTIES_PATH}}
+          echo keyAlias=${{ secrets.KEY_ALIAS }} >> ${{env.PROPERTIES_PATH}}
+
+      - run: |
+          $base64Value = "${{ secrets.KEYSTORE2 }}"
+          $bytes = [System.Convert]::FromBase64String($base64Value)
+          Set-Content -Path "android/app/key.jks" -Value $bytes -Encoding Byte
+        shell: pwsh
+
+      - run: flutter clean
       - run: flutter pub get
 
       - name: Build Android
