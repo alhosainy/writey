@@ -18,11 +18,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   bool isErasing = false;
 
-  bool isControllerBarVisible = true;
-
   double strokeWidth = 4;
 
   bool isPickingStroke = false;
+
+  double barWidth = 50;
 
   final Uri _url = Uri.parse('https://github.com/alhosainy');
 
@@ -32,52 +32,10 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  // Future<void> setFullScreen() async {
-  //   await document.documentElement!.requestFullscreen();
-  // }
-
-  // @override
-  // void initState() {
-  //   setFullScreen().then((value) => setFullScreen());
-
-  //   super.initState();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Writey',
-          style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'NotoSans'),
-        ),
-        actions: [
-          GestureDetector(
-            onTap: () async => await _launchUrl(),
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(FontAwesomeIcons.github),
-                  Text(
-                    'Alhosainy Yaser',
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'NotoSans'),
-                  ),
-                ],
-              ),
-            ),
-          )
-        ],
-        backgroundColor: Colors.teal[200],
-      ),
+      appBar: _buildAppBar(context),
       body: Stack(
         children: [
           SizedBox(
@@ -92,70 +50,128 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: isControllerBarVisible
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      isPickingStroke
-                          ? Container(
-                              width: 50,
-                              height: 300,
-                              decoration: BoxDecoration(
-                                  color: Colors.teal[200],
-                                  borderRadius: BorderRadius.circular(30)),
-                              child: RotatedBox(
-                                quarterTurns: 3,
-                                child: Slider(
-                                  min: 0,
-                                  max: 20,
-                                  value: strokeWidth > 20 ? 20 : strokeWidth,
-                                  label: strokeWidth.toString(),
-                                  divisions: 5,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      strokeWidth = value;
-                                    });
-                                  },
-                                ),
-                              ),
-                            )
-                          : Container(),
-                      const SizedBox(width: 10),
-                      ControllerBar(
-                        whiteBoardController: _whiteBoardController,
-                        isErasing: isErasing,
-                        setIsErasing: (value) async =>
-                            setState(() => isErasing = value),
-                        strokeColor: strokeColor,
-                        setStrokeColor: (value) {
-                          setState(() => strokeColor = value);
-                          Navigator.of(context).pop();
-                        },
-                        isPickingStroke: isPickingStroke,
-                        setIsPickingStroke: (value) =>
-                            setState(() => isPickingStroke = !isPickingStroke),
-                        isControllerBarVisible: isControllerBarVisible,
-                        setIsControllerBarVisible: (value) => setState(() =>
-                            isControllerBarVisible = !isControllerBarVisible),
-                        strokeWidth: strokeWidth,
-                      ),
-                    ],
-                  )
-                : Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: IconButton.filled(
-                      tooltip: 'Show',
-                      onPressed: () =>
-                          setState(() => isControllerBarVisible = true),
-                      icon: const Icon(Icons.arrow_back_ios_rounded),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              _buildHideButton(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  isPickingStroke
+                      ? Container(
+                          width: 50,
+                          height: 300,
+                          decoration: BoxDecoration(
+                              color: Colors.teal[200],
+                              borderRadius: BorderRadius.circular(30)),
+                          child: RotatedBox(
+                            quarterTurns: 3,
+                            child: Slider(
+                              min: 0,
+                              max: 20,
+                              value: strokeWidth > 20 ? 20 : strokeWidth,
+                              label: strokeWidth.toString(),
+                              divisions: 5,
+                              onChanged: (value) {
+                                setState(() {
+                                  strokeWidth = value;
+                                });
+                              },
+                            ),
+                          ),
+                        )
+                      : Container(),
+                  const SizedBox(width: 10),
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 150),
+                    height: MediaQuery.of(context).size.height / 2,
+                    width: barWidth,
+                    child: ControllerBar(
+                      barWidth: barWidth,
+                      whiteBoardController: _whiteBoardController,
+                      isErasing: isErasing,
+                      setIsErasing: (value) async =>
+                          setState(() => isErasing = value),
+                      strokeColor: strokeColor,
+                      setStrokeColor: (value) {
+                        setState(() => strokeColor = value);
+                        Navigator.of(context).pop();
+                      },
+                      isPickingStroke: isPickingStroke,
+                      setIsPickingStroke: (value) =>
+                          setState(() => isPickingStroke = !isPickingStroke),
+                      strokeWidth: strokeWidth,
                     ),
                   ),
+                ],
+              ),
+            ],
           ),
         ],
       ),
     );
   }
+
+  AppBar _buildAppBar(BuildContext context) => AppBar(
+      title: const Text(
+        'Writey',
+        style: TextStyle(
+            fontSize: 30, fontWeight: FontWeight.bold, fontFamily: 'NotoSans'),
+      ),
+      actions: [
+        GestureDetector(
+          onTap: () async => await _launchUrl(),
+          child: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(FontAwesomeIcons.github),
+                Text(
+                  'Alhosainy Yaser',
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'NotoSans'),
+                ),
+              ],
+            ),
+          ),
+        )
+      ],
+      backgroundColor: Colors.teal[200]);
+
+  Widget _buildHideButton() => Container(
+        height: 25,
+        width: 50,
+        decoration: BoxDecoration(
+          color: Colors.teal[200],
+          border:
+              Border.all(color: Colors.grey[600]!.withOpacity(0.5), width: 1.2),
+        ),
+        child: GestureDetector(
+          onTap: () {
+            setState(() {
+              if (barWidth == 50) {
+                barWidth = 0;
+                isPickingStroke = false;
+              } else {
+                barWidth = 50;
+              }
+            });
+          },
+          child: barWidth == 50
+              ? const Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  size: 20,
+                )
+              : const Icon(
+                  Icons.arrow_back_ios_rounded,
+                  size: 20,
+                ),
+        ),
+      );
 }
