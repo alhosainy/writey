@@ -29,7 +29,7 @@ jobs:
       - run: |
           $base64Value = "${{ secrets.KEYSTORE2 }}"
           $bytes = [System.Convert]::FromBase64String($base64Value)
-          Set-Content -Path "android/app/key.jks" -Value $bytes -Encoding Byte
+          Set-Content -Path "android/app/key.jks" -Value $bytes -AsByteStream
         shell: pwsh
 
       - run: flutter clean
