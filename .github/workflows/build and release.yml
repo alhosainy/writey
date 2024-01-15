@@ -25,12 +25,13 @@ jobs:
           echo keyPassword=${{ secrets.KEY_STORE }} > ${{env.PROPERTIES_PATH}}
           echo storePassword=${{ secrets.KEY_PASSWORD }} >> ${{env.PROPERTIES_PATH}}
           echo keyAlias=${{ secrets.KEY_ALIAS }} >> ${{env.PROPERTIES_PATH}}
-          echo storeFile=${{env.KEYSTORE_PATH}} >> ${{env.PROPERTIES_PATH}}
+          echo storeFile=android/key.jks >> ${{env.PROPERTIES_PATH}}
 
       - run: |
           $base64Value = "${{ secrets.KEYSTORE2 }}"
           $bytes = [System.Convert]::FromBase64String($base64Value)
           Set-Content -Path "${{env.KEYSTORE_PATH}}" -Value $bytes -AsByteStream
+          
         shell: pwsh
 
       - run: flutter clean
