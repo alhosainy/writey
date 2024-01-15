@@ -61,7 +61,7 @@ android {
         release {
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
-            storeFile keystoreProperties['storeFile'] ? file('key.jks') : null
+            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']): file('key.jks') 
             storePassword keystoreProperties['storePassword']
         }
     }
@@ -71,11 +71,7 @@ android {
         }
     }
 
-    applicationVariants.all { variant ->
-        variant.outputs.all {
-        outputFileName = "${applicationName}_${variant.buildType.name}_${defaultConfig.versionName}.apk"
-        }
-    }
+    
 }
 
 flutter {
