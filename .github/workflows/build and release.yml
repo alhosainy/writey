@@ -34,12 +34,12 @@ jobs:
       - run: |
           $base64Value = "${{ secrets.KEYSTORE2 }}"
           $bytes = [System.Convert]::FromBase64String($base64Value)
-          Set-Content -Path "$KEY\key.jks" -Value $bytes -AsByteStream
+          Set-Content -Path "key.jks" -Value $bytes -AsByteStream
 
         shell: pwsh
 
       - run: |
-          cd $KEY
+          
           ls
       # - run: flutter clean
       # - run: flutter pub get
