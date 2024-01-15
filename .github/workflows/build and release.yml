@@ -7,9 +7,9 @@ on:
     branches: ["master","test-features"]
 
 env:
+  APP_VERSION: "1.0.0"
   PROPERTIES_PATH: "./android/key.properties"
   KEYSTORE_PATH: "/key.jks"
-  APP_VERSION: "1.0.0"
 
 jobs:
   build-and-release:
@@ -24,23 +24,17 @@ jobs:
       - uses: subosito/flutter-action@v2
       # Creating the key.properties file
       - run: |
-          $KEY = Get-Location
           echo keyPassword=${{ secrets.KEY_STORE }} > ${{env.PROPERTIES_PATH}}
           echo storePassword=${{ secrets.KEY_PASSWORD }} >> ${{env.PROPERTIES_PATH}}
           echo keyAlias=${{ secrets.KEY_ALIAS }} >> ${{env.PROPERTIES_PATH}}
           echo storeFile=..\\..\\key.jks >> ${{env.PROPERTIES_PATH}}
-          Get-Content ${{env.PROPERTIES_PATH}}
 
       - run: |
           $base64Value = "${{ secrets.KEYSTORE2 }}"
           $bytes = [System.Convert]::FromBase64String($base64Value)
           Set-Content -Path "key.jks" -Value $bytes -AsByteStream
-
         shell: pwsh
 
-      # - run: |
-          
-      #     ls
       - run: flutter clean
       - run: flutter pub get
 
@@ -52,14 +46,18 @@ jobs:
       - name: Build Windows
         run: |
           flutter build windows --release
-          rename "app-arm64-v8a-release.apk" "Writey-arm64.apk"
-          rename "app-armeabi-v7a-release.apk" "Writey-armeabi.apk"
-          rename "app-x86_64-release.apk" "Writey-x86_64.apk"
 
       - name: make .zip file
         run: |
           cd build\windows\x64\runner\Release
           jar -cfM writey.zip .
+
+      - name: rename apks
+        run: |
+          cd build\app\outputs\flutter-apk\
+          Rename-Item "app-arm64-v8a-release.apk" "Writey-arm64.apk"
+          Rename-Item "app-armeabi-v7a-release.apk" "Writey-armeabi.apk"
+          Rename-Item "app-x86_64-release.apk" "Writey-x86_64.apk"
 
       - name: Push to Release Branch
         uses: ncipollo/release-action@v1
