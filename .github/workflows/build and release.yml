@@ -5,7 +5,7 @@ on:
     types:
       - closed
     branches: [master]
-    types: [closed]
+    types: [closed] 
 
 env:
   APP_VERSION: "1.0.0"
