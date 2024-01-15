@@ -28,7 +28,7 @@ jobs:
           echo keyPassword=${{ secrets.KEY_STORE }} > ${{env.PROPERTIES_PATH}}
           echo storePassword=${{ secrets.KEY_PASSWORD }} >> ${{env.PROPERTIES_PATH}}
           echo keyAlias=${{ secrets.KEY_ALIAS }} >> ${{env.PROPERTIES_PATH}}
-          echo storeFile=$KEY\key.jks >> ${{env.PROPERTIES_PATH}}
+          echo storeFile=..\\..\\key.jks >> ${{env.PROPERTIES_PATH}}
           Get-Content ${{env.PROPERTIES_PATH}}
 
       - run: |
