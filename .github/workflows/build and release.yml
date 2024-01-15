@@ -27,7 +27,7 @@ jobs:
           echo keyPassword=${{ secrets.KEY_STORE }} > ${{env.PROPERTIES_PATH}}
           echo storePassword=${{ secrets.KEY_PASSWORD }} >> ${{env.PROPERTIES_PATH}}
           echo keyAlias=${{ secrets.KEY_ALIAS }} >> ${{env.PROPERTIES_PATH}}
-          echo storeFile=android/key.jks >> ${{env.PROPERTIES_PATH}}
+          echo storeFile=key.jks >> ${{env.PROPERTIES_PATH}}
 
       - run: |
           $base64Value = "${{ secrets.KEYSTORE2 }}"
@@ -41,9 +41,16 @@ jobs:
 
       - name: Build Android
         run: flutter build apk --release --split-per-abi
+      
+      - run: cd build/app/outputs/apk/release/
 
       - name: Build Windows
-        run: flutter build windows --release
+        run: |
+          flutter build windows --release
+          rename "app-arm64-v8a-release.apk" "Writey-arm64.apk"
+          rename "app-armeabi-v7a-release.apk" "Writey-armeabi.apk"
+          rename "app-x86_64-release.apk" "Writey-x86_64.apk"
+
 
       - name: make .zip file
         run: |
@@ -57,7 +64,7 @@ jobs:
           token: ${{ secrets.GH_TOKEN }}
           tag: v${{ env.APP_VERSION }}
           body: |
-            - [Download for Android](https://github.com/alhosainy/writey/releases/download/v${{env.APP_VERSION}}/app-arm64-v8a-release.apk)
+            - [Download for Android](https://github.com/alhosainy/writey/releases/download/v${{env.APP_VERSION}}/Writey-arm64.apk)
             - [Download for Windows](https://github.com/alhosainy/writey/releases/download/v${{env.APP_VERSION}}/writey.zip)
             - [Web Version](https://alhosainy.github.io/writey/)
           prerelease: true
