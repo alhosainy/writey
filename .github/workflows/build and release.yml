@@ -64,10 +64,10 @@ jobs:
         with:
           artifacts: "build/app/outputs/flutter-apk/*.apk,build/windows/x64/runner/Release/*.zip"
           token: ${{ secrets.GH_TOKEN }}
-          tag: v${{ env.APP_VERSION }}
+          tag: v1.0.${{github.run_number}}
           body: |
-            - [Download for Android](https://github.com/alhosainy/writey/releases/download/v${{env.APP_VERSION}}/Writey-arm64.apk)
-            - [Download for Windows](https://github.com/alhosainy/writey/releases/download/v${{env.APP_VERSION}}/writey.zip)
+            - [Download for Android](https://github.com/alhosainy/writey/releases/download/v1.0.${{github.run_number}}/Writey-arm64.apk)
+            - [Download for Windows](https://github.com/alhosainy/writey/releases/download/v1.0.${{github.run_number}}/writey.zip)
             - [Web Version](https://alhosainy.github.io/writey/)
           prerelease: true
           generateReleaseNotes: true
