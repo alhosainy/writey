@@ -17,11 +17,11 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
-      # - uses: actions/setup-java@v4
-      #   with:
-      #     distribution: "oracle"
-      #     java-version: "17.0.8"
-      # - uses: subosito/flutter-action@v2
+      - uses: actions/setup-java@v4
+        with:
+          distribution: "oracle"
+          java-version: "17.0.8"
+      - uses: subosito/flutter-action@v2
       # Creating the key.properties file
       - run: |
           $KEY = Get-Location
@@ -37,53 +37,48 @@ jobs:
           Set-Content -Path "$KEY\key.jks" -Value $bytes -AsByteStream
 
         shell: pwsh
-      - run: |
-          $KEY = Get-Location
-          Write-Output $KEY
-          cd android\app
-          ls
-  #     - run: flutter clean
-  #     - run: flutter pub get
+      - run: flutter clean
+      - run: flutter pub get
 
-  #     - name: Build Android
-  #       run: flutter build apk --release --split-per-abi
+      - name: Build Android
+        run: flutter build apk --release --split-per-abi
 
-  #     - run: cd build/app/outputs/apk/release/
+      - run: cd build/app/outputs/apk/release/
 
-  #     - name: Build Windows
-  #       run: |
-  #         flutter build windows --release
-  #         rename "app-arm64-v8a-release.apk" "Writey-arm64.apk"
-  #         rename "app-armeabi-v7a-release.apk" "Writey-armeabi.apk"
-  #         rename "app-x86_64-release.apk" "Writey-x86_64.apk"
+      - name: Build Windows
+        run: |
+          flutter build windows --release
+          rename "app-arm64-v8a-release.apk" "Writey-arm64.apk"
+          rename "app-armeabi-v7a-release.apk" "Writey-armeabi.apk"
+          rename "app-x86_64-release.apk" "Writey-x86_64.apk"
 
-  #     - name: make .zip file
-  #       run: |
-  #         cd build\windows\x64\runner\Release
-  #         jar -cfM writey.zip .
+      - name: make .zip file
+        run: |
+          cd build\windows\x64\runner\Release
+          jar -cfM writey.zip .
 
-  #     - name: Push to Release Branch
-  #       uses: ncipollo/release-action@v1
-  #       with:
-  #         artifacts: "build/app/outputs/apk/release/*.apk,build/windows/x64/runner/Release/*.zip"
-  #         token: ${{ secrets.GH_TOKEN }}
-  #         tag: v${{ env.APP_VERSION }}
-  #         body: |
-  #           - [Download for Android](https://github.com/alhosainy/writey/releases/download/v${{env.APP_VERSION}}/Writey-arm64.apk)
-  #           - [Download for Windows](https://github.com/alhosainy/writey/releases/download/v${{env.APP_VERSION}}/writey.zip)
-  #           - [Web Version](https://alhosainy.github.io/writey/)
-  #         prerelease: true
-  #         generateReleaseNotes: true
+      - name: Push to Release Branch
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "build/app/outputs/apk/release/*.apk,build/windows/x64/runner/Release/*.zip"
+          token: ${{ secrets.GH_TOKEN }}
+          tag: v${{ env.APP_VERSION }}
+          body: |
+            - [Download for Android](https://github.com/alhosainy/writey/releases/download/v${{env.APP_VERSION}}/Writey-arm64.apk)
+            - [Download for Windows](https://github.com/alhosainy/writey/releases/download/v${{env.APP_VERSION}}/writey.zip)
+            - [Web Version](https://alhosainy.github.io/writey/)
+          prerelease: true
+          generateReleaseNotes: true
 
-  # Release-to-github-pages:
-  #   needs: build-and-release
-  #   name: Release to Github Pages
-  #   runs-on: ubuntu-latest
+  Release-to-github-pages:
+    needs: build-and-release
+    name: Release to Github Pages
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: subosito/flutter-action@v2
-  #     - uses: bluefireteam/flutter-gh-pages@v7
-  #       with:
-  #         baseHref: /writey/
-  #         webRenderer: canvaskit
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+      - uses: bluefireteam/flutter-gh-pages@v7
+        with:
+          baseHref: /writey/
+          webRenderer: canvaskit
