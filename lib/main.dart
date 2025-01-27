@@ -21,4 +21,3 @@ class MyApp extends StatelessWidget {
   }
 }
 //TODO : Add a feature to save the whiteboard as an image
-//TODO update the app bar to be more user friendly
