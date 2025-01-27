@@ -1,6 +1,6 @@
 # Writey
 
-![Writey App](path/to/your/image.png)
+![Writey App](assets/app_image.png)
 
 ## Introduction
 
