@@ -38,76 +38,93 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: _buildAppBar(context),
       body: Stack(
         children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Center(
-              child: WhiteBoard(
-                strokeColor: isErasing ? Colors.white : strokeColor,
-                strokeWidth: isErasing ? 30 : strokeWidth,
-                isErasing: isErasing,
-                controller: _whiteBoardController,
-              ),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[100],
+              border: Border.all(color: Colors.grey[300]!, width: 1),
+            ),
+            child: WhiteBoard(
+              strokeColor: isErasing ? Colors.white : strokeColor,
+              strokeWidth: isErasing ? 30 : strokeWidth,
+              isErasing: isErasing,
+              controller: _whiteBoardController,
             ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              _buildHideButton(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  isPickingStroke
-                      ? Container(
-                          width: 50,
-                          height: 300,
-                          decoration: BoxDecoration(
-                              color: Colors.teal[200],
-                              borderRadius: BorderRadius.circular(30)),
-                          child: RotatedBox(
-                            quarterTurns: 3,
-                            child: Slider(
-                              min: 0,
-                              max: 20,
-                              value: strokeWidth > 20 ? 20 : strokeWidth,
-                              label: strokeWidth.toString(),
-                              divisions: 5,
-                              onChanged: (value) {
-                                setState(() {
-                                  strokeWidth = value;
-                                });
-                              },
+          Positioned(
+            right: 16,
+            top: 16,
+            child: Column(
+              children: [
+                _buildHideButton(),
+                const SizedBox(height: 8),
+                AnimatedOpacity(
+                  duration: const Duration(milliseconds: 300),
+                  opacity: barWidth == 50 ? 1 : 0,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                    height: MediaQuery.of(context).size.height * 0.5,
+                    width: barWidth,
+                    child: Stack(
+                      children: [
+                        ControllerBar(
+                          barWidth: barWidth,
+                          whiteBoardController: _whiteBoardController,
+                          isErasing: isErasing,
+                          setIsErasing: (value) async =>
+                              setState(() => isErasing = value),
+                          strokeColor: strokeColor,
+                          setStrokeColor: (value) {
+                            setState(() => strokeColor = value);
+                            Navigator.of(context).pop();
+                          },
+                          isPickingStroke: isPickingStroke,
+                          setIsPickingStroke: (value) => setState(
+                              () => isPickingStroke = !isPickingStroke),
+                          strokeWidth: strokeWidth,
+                        ),
+                        if (isPickingStroke)
+                          Positioned(
+                            right: 60,
+                            child: Container(
+                              width: 200,
+                              height: 48,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(24),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: SliderTheme(
+                                data: SliderThemeData(
+                                  trackHeight: 4,
+                                  thumbColor: Colors.teal[800],
+                                  activeTrackColor: Colors.teal[400],
+                                  inactiveTrackColor: Colors.grey[300],
+                                ),
+                                child: Slider(
+                                  min: 0,
+                                  max: 20,
+                                  value: strokeWidth,
+                                  divisions: 5,
+                                  label: strokeWidth.round().toString(),
+                                  onChanged: (value) =>
+                                      setState(() => strokeWidth = value),
+                                ),
+                              ),
                             ),
                           ),
-                        )
-                      : Container(),
-                  const SizedBox(width: 10),
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 150),
-                    height: MediaQuery.of(context).size.height / 2,
-                    width: barWidth,
-                    child: ControllerBar(
-                      barWidth: barWidth,
-                      whiteBoardController: _whiteBoardController,
-                      isErasing: isErasing,
-                      setIsErasing: (value) async =>
-                          setState(() => isErasing = value),
-                      strokeColor: strokeColor,
-                      setStrokeColor: (value) {
-                        setState(() => strokeColor = value);
-                        Navigator.of(context).pop();
-                      },
-                      isPickingStroke: isPickingStroke,
-                      setIsPickingStroke: (value) =>
-                          setState(() => isPickingStroke = !isPickingStroke),
-                      strokeWidth: strokeWidth,
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -115,63 +132,87 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   AppBar _buildAppBar(BuildContext context) => AppBar(
-      title: const Text(
-        'Writey',
-        style: TextStyle(
-            fontSize: 30, fontWeight: FontWeight.bold, fontFamily: 'NotoSans'),
-      ),
-      actions: [
-        GestureDetector(
-          onTap: () async => await _launchUrl(),
-          child: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(FontAwesomeIcons.github),
-                Text(
-                  'Alhosainy Yaser',
-                  style: TextStyle(
-                      fontSize: 12,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'NotoSans'),
+        elevation: 0,
+        backgroundColor: Colors.white,
+        title: Text(
+          'Writey',
+          style: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: Colors.teal[800],
+            fontFamily: 'NotoSans',
+          ),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: GestureDetector(
+              onTap: () async => await _launchUrl(),
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 6,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
-              ],
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      FontAwesomeIcons.github,
+                      size: 20,
+                      color: Colors.teal[800],
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Alhosainy Yaser',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.teal[800],
+                        fontFamily: 'NotoSans',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
-        )
-      ],
-      backgroundColor: Colors.teal[200]);
+        ],
+      );
 
-  Widget _buildHideButton() => Container(
-        height: 25,
-        width: 50,
-        decoration: BoxDecoration(
-          color: Colors.teal[200],
-          border:
-              Border.all(color: Colors.grey[600]!.withOpacity(0.5), width: 1.2),
-        ),
-        child: GestureDetector(
-          onTap: () {
-            setState(() {
-              if (barWidth == 50) {
-                barWidth = 0;
-                isPickingStroke = false;
-              } else {
-                barWidth = 50;
-              }
-            });
-          },
-          child: barWidth == 50
-              ? const Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  size: 20,
-                )
-              : const Icon(
-                  Icons.arrow_back_ios_rounded,
-                  size: 20,
-                ),
+  Widget _buildHideButton() => GestureDetector(
+        onTap: () {
+          setState(() {
+            barWidth = barWidth == 50 ? 0 : 50;
+            isPickingStroke = false;
+          });
+        },
+        child: Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Icon(
+            barWidth == 50 ? Icons.chevron_right : Icons.chevron_left,
+            color: Colors.teal[800],
+          ),
         ),
       );
 }
