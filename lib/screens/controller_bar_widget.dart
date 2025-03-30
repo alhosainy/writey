@@ -4,17 +4,18 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:whiteboard/whiteboard.dart';
 
 class ControllerBar extends StatefulWidget {
-  const ControllerBar(
-      {super.key,
-      required this.whiteBoardController,
-      required this.isErasing,
-      required this.setIsErasing,
-      required this.strokeColor,
-      required this.setStrokeColor,
-      required this.isPickingStroke,
-      required this.setIsPickingStroke,
-      required this.strokeWidth,
-      required this.barWidth});
+  const ControllerBar({
+    super.key,
+    required this.whiteBoardController,
+    required this.isErasing,
+    required this.setIsErasing,
+    required this.strokeColor,
+    required this.setStrokeColor,
+    required this.isPickingStroke,
+    required this.setIsPickingStroke,
+    required this.strokeWidth,
+    required this.barWidth,
+  });
   final WhiteBoardController whiteBoardController;
   final bool isErasing;
   final Function(bool) setIsErasing;
@@ -40,78 +41,177 @@ class _ControllerBarState extends State<ControllerBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: widget.barWidth,
       decoration: BoxDecoration(
-        color: Colors.teal[200],
-        borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(20),
-        ),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          IconButton.outlined(
+          _buildIconButton(
+            icon: FontAwesomeIcons.arrowRotateLeft,
             tooltip: 'Undo',
-            onPressed: () {
-              setState(() {
-                widget.whiteBoardController.undo();
-              });
-            },
-            icon: const Icon(FontAwesomeIcons.arrowRotateLeft),
+            onPressed: () => widget.whiteBoardController.undo(),
           ),
-          IconButton.outlined(
+          _buildIconButton(
+            icon: FontAwesomeIcons.arrowRotateRight,
             tooltip: 'Redo',
-            onPressed: () {
-              setState(() {
-                widget.whiteBoardController.redo();
-              });
-            },
-            icon: const Icon(FontAwesomeIcons.arrowRotateRight),
+            onPressed: () => widget.whiteBoardController.redo(),
           ),
-          IconButton.outlined(
+          _buildIconButton(
+            icon: FontAwesomeIcons.eraser,
             tooltip: 'Eraser',
             isSelected: widget.isErasing,
             onPressed: () => widget.setIsErasing(!widget.isErasing),
-            icon: const Icon(FontAwesomeIcons.eraser),
           ),
-          IconButton.outlined(
+          _buildIconButton(
+            icon: Icons.clear,
             tooltip: 'Clear all',
-            onPressed: () {
-              setState(() {
-                widget.whiteBoardController.clear();
-              });
-            },
-            icon: const Icon(Icons.clear),
+            onPressed: () => widget.whiteBoardController.clear(),
           ),
-          IconButton.outlined(
-              tooltip: 'Color',
-              onPressed: () {
-                showDialog(
-                  builder: (context) => AlertDialog(
-                    title: const Text('Pick a color!'),
-                    content: SingleChildScrollView(
-                      child: BlockPicker(
-                          pickerColor: widget.strokeColor,
-                          onColorChanged: widget.setStrokeColor),
-                    ),
-                  ),
-                  context: context,
-                );
-              },
-              icon: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: widget.strokeColor,
-                ),
-                height: 25,
-                width: 25,
-              )),
-          IconButton.outlined(
-            tooltip: 'Width',
-            isSelected: widget.isPickingStroke,
-            onPressed: () => widget.setIsPickingStroke(!widget.isPickingStroke),
-            icon: buildStrokeIconShape(widget.strokeWidth),
+          _buildColorButton(),
+          _buildStrokeWidthButton(
+            (_) => widget.setIsPickingStroke(!widget.isPickingStroke),
+            widget.strokeWidth,
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildIconButton({
+    required IconData icon,
+    required String tooltip,
+    required VoidCallback onPressed,
+    bool isSelected = false,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Tooltip(
+        message: tooltip,
+        child: GestureDetector(
+          onTap: () => setState(onPressed),
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: isSelected ? Colors.teal[100] : Colors.transparent,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(icon, color: Colors.teal[800], size: 24),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildColorButton() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Tooltip(
+        message: 'Color',
+        child: GestureDetector(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+                title: const Text('Select Color'),
+                content: SingleChildScrollView(
+                  child: BlockPicker(
+                    pickerColor: widget.strokeColor,
+                    onColorChanged: widget.setStrokeColor,
+                  ),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('Done'),
+                  ),
+                ],
+              ),
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Icon(Icons.palette, color: Colors.teal[800], size: 24),
+                Positioned(
+                  bottom: 0,
+                  child: Container(
+                    width: 12,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: widget.strokeColor,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStrokeWidthButton(
+    Function(double) onStrokeWidthSelected,
+    double strokeWidth,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Tooltip(
+        message: 'Stroke Width',
+        child: GestureDetector(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+                title: const Text('Select Stroke Width'),
+                content: SingleChildScrollView(
+                  child: Column(
+                    children: [8.0, 12.0, 16.0, 20.0].map((width) {
+                      return ListTile(
+                        leading: buildStrokeIconShape(width),
+                        title: Text('${width.toInt()} px'),
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('Cancel'),
+                  ),
+                ],
+              ),
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(Icons.brush, color: Colors.teal[800], size: 24),
+          ),
+        ),
       ),
     );
   }
